@@ -1,0 +1,22 @@
+#root {
+    text-align: center;
+  }
+
+
+#header{
+    margin:200px auto 50px;
+}
+
+#search_div{
+    margin: auto;
+    width:60%;
+    
+}
+#search_btn{
+    margin-top: 50px;
+}
+#res{
+    margin-top: 50px;
+}
+ 
+
