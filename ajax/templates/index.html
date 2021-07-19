@@ -34,7 +34,7 @@
 
         {% if not search_query %}
           <h3></h3>
-        {% else %}
+        {% elif comments|length ==0 %}
           <h3>Unfortunately, there are no results for "{{ search_query }}"</h3>
         {% endif %}
 
@@ -47,7 +47,7 @@
           <input type="submit" value="Submit new comment" />
         </form>
 
-        
+
         {% for comment in comments %}
           <div>
             <p>{{ comment }}</p>

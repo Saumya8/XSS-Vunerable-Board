@@ -5,11 +5,14 @@ app=Flask(__name__)
 
 @app.route("/", methods = ['GET','POST'])
 def index():
-    input_query=request.args.get('input')
-    comments = db.get_comments(input_query)
+    comments = []
+    input_query = ''
+    if request.method == 'GET':
+        input_query=request.args.get('input')
+        comments = db.get_comments(input_query)
 
     if request.method == 'POST':
-        db.add_comment(input_query)
+        db.add_comment(request.form['comment'])
 
 
 
