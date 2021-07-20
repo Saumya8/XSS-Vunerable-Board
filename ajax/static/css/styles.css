@@ -13,11 +13,16 @@
     
 }
 #search_btn{
-    margin-top: 50px;
-    margin-bottom: 50px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    width: 10%;
+    
 }
-#res{
-    margin-top: 50px;
-}
- 
 
+ 
+#anc{
+    text-decoration: none;
+}
+#anc:hover{
+    text-decoration: underline;
+}

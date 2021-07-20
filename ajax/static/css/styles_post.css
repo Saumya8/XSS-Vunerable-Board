@@ -1,0 +1,41 @@
+
+
+#posts{
+    margin-top: 80px;
+    
+}
+
+#write{
+    margin-top: 80px;
+}
+
+#ta{
+    width: 70%;
+    margin: auto 0;
+}
+
+#l{
+    margin-bottom: 15px;
+}
+
+#btn{
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+#post {
+    border: 1px solid rgba(16, 46, 46, 1);
+    background-color: rgba(252, 252, 252, 0.973);
+    border-radius: 5px;
+    padding-left: 40px;
+    padding-right: 30px;
+    padding-top: 10px;
+    margin: auto;
+    margin-bottom: 20px;
+    width: 80%;
+}
+
+#la{
+    margin-bottom: 15px;
+    margin-left: 25px;
+}

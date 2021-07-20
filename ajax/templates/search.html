@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+{% autoescape false %}
+<html>
+  <head lang="en">
+  <meta charset="UTF-8">
+  <title>Oh no!</title>
+  
+
+    <link rel="stylesheet" href="/static/css/styles.css">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  </head>
+<body>
+   <div id="root">
+
+     <div id="header"> 
+       <h1 id="h">Messenger</h1> 
+      </div>
+    
+      <form method="GET">
+        <div class="form-group row" id="search_div">
+          
+          <input type="text" class="form-control form-control-lg" id="search_bar" placeholder="Search for post..." name="input">
+          
+        </div>
+   
+
+        <input type="submit" class="btn btn-primary btn-lg" id="search_btn" value="Search">
+      </form>
+
+      {% if not search_query %}
+        <h3></h3>
+      {% else %}
+        <h4>Unfortunately, there are no results for "{{ search_query }}"</h4>
+      {% endif %}
+    
+      <a id="anc" href="/posts">Add Post</a> 
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+{% endautoescape %}
+</html>
