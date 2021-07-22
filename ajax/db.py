@@ -6,9 +6,23 @@ def connect_db():
     db.cursor().execute('CREATE TABLE IF NOT EXISTS posts '
                         '(id INTEGER PRIMARY KEY, '
                         'post TEXT)')
+    db.cursor().execute('CREATE TABLE IF NOT EXISTS login '
+                        '(id INTEGER PRIMARY KEY, '
+                        'username TEXT, password TEXT)')
     db.commit()
     return db
 
+def add_user(username, password):
+    db = connect_db()
+    db.cursor().execute('INSERT INTO login (username, password) '
+                        'VALUES (?, ?)', (username,password,))
+    db.commit()
+
+""" def verify_user(username, password):
+    db = connect_db()
+    db.cursor().execute('SELECT login (username, password) '
+                        'VALUES (?, ?)', (username,password,))
+    db.commit() """
 
 def add_post(post):
     db = connect_db()
