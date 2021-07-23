@@ -101,7 +101,7 @@ def logout():
 def signup():
     print("start signup")
     if request.method == 'POST':
-        db.connect()
+        db.connect_db()
         #creating a default email for non-null
         email = "S"; password ="S"; print("input start")
         email = request.form['username']
@@ -137,7 +137,7 @@ def login():
         return redirect(url_for('search'))
 
     if request.method == 'POST':
-        db.connect()
+        db.connect_db()
         print("take input")
         email = request.form['username']
         password = request.form['password']
