@@ -128,7 +128,6 @@ def logout():
 def signup():
     print("start signup")
     if request.method == 'POST':
-        #if current_user.is_authenticated:
         db.connect_db()
         #creating a default email for non-null
         email = "S"; password ="S"; print("input start")
