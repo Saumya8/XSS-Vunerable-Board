@@ -1,7 +1,9 @@
 #from db import add_user
 from flask import Flask, render_template, request, url_for,redirect, flash, Response 
 import db
+import re
 import sqlite3
+import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 #from forms import LoginForm
@@ -15,16 +17,41 @@ app.config['SECRET_KEY'] = SECRET_KEY
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
 
+def search_posts(input_query):
+    posts = db.get_posts();
+    result = []
+    for (post, username, time) in posts:
+        if re.search(text_str(input_query), text_str(post)) or re.search(text_str(input_query),text_str(username)):
+            result.append([post, username, time])
+    return result
+
+def text_str(input):
+    return str(input).lower()
+
 @app.route("/")
 def search():
     input_query=request.args.get('input')
-    return render_template('search.html', search_query=input_query)
+    result = search_posts(input_query)
+    if result == []:
+        return render_template('search.html', search_query=input_query, result =None)
+
+    print("got some matches")
+    return render_template('search.html', search_query=input_query, result=result)
+        #redirect(url_for())
+
+#@app.route("/results")
 
 
 @app.route("/posts", methods=['GET', 'POST'])
 def c():
-    if request.method == 'POST':
-        db.add_post(request.form['post'])
+    if request.method == 'POST' and request.form['post'] is not None:
+        if current_user.is_authenticated:
+            username = current_user.email
+        else:
+            username = "Anonymus"
+        now = datetime.datetime.now()
+        time = now.strftime('%H:%M:%S on %A: %B the %dth, %Y')
+        db.add_post(request.form['post'], username, time)
     posts = db.get_posts()
     return render_template('posts.html',posts=posts)
 
@@ -101,6 +128,8 @@ def logout():
 def signup():
     print("start signup")
     if request.method == 'POST':
+        #if current_user.is_authenticated:
+        db.connect_db()
         #creating a default email for non-null
         email = "S"; password ="S"; print("input start")
         email = request.form['username']
@@ -136,6 +165,7 @@ def login():
         return redirect(url_for('search'))
 
     if request.method == 'POST':
+        db.connect_db()
         print("take input")
         email = request.form['username']
         password = request.form['password']
@@ -164,8 +194,8 @@ def login():
                 login_user(Us, remember=remember)
                 print("login Successfull")
                 Umail = list({email})[0].split('@')[0]
-                flash('Logged in successfully '+Umail)
-                redirect(url_for('search'))
+                flash('Logged in successfully '+ Umail)
+                return redirect(url_for('success'))
             else:
                 print("login unsuccessfull")
                 flash('Login Unsuccessfull. Wrong password')

@@ -14,9 +14,12 @@
   <div class="row">
     <div class="col" id="posts">
       <label id="la">Posts: </label>
-      {% for post in posts %}
+      {% for (post, username, time) in posts %}
       <div>
-        <p id="post">{{ post }}</p>
+        <p id="post">
+          '{{ post }}' by {{username}} 
+          <br>at {{time}}
+        </p>
       </div>
       {% endfor %}
     </div>
@@ -26,7 +29,15 @@
         <textarea class="form-control ml-1 shadow-none textarea" id="ta" name="post"></textarea>
         <input type="submit" value="Submit Post" class="btn btn-primary" id="btn" />
       </form>
-      <a href="/">Searching for a post?</a>
+      <p><a href="/">Searching for a post?</a></p>
+      {% if current_user.is_authenticated %}
+      <p>You are logged in with username {{current_user.email}}. Do You want to post <a href="/logout">Anonymously</a>?
+        <br>{Warning: You would be logged out}<p>
+      <a href="/profile">Go to Profile</a>
+      {% else %}
+      <p>You are posting Anonymously. Would you like to <a href="/login">Login</a> or <a href="/signup">Register</a></p>
+      
+    {% endif %}
     </div>
   </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

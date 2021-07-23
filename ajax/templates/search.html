@@ -13,13 +13,13 @@
 <body>
    <div id="root">
 
-     <div id="header"> 
+    <div id="header"> 
        <h1 id="h">Messenger</h1> 
       </div>
       <div> 
       <p>
       {% if current_user.is_authenticated %}
-      <h8>Hi {{ current_user.email }}! Have a Great Secure Day!</h8>
+      <h8>Hi {{ current_user.email }}! Have a Great and Secure Day!</h8>
       {% else %}
         <h9>Not Logged In.</h9>
       {% endif %}
@@ -31,8 +31,6 @@
       {% endif %}
       </p>
     </div>
-  
-
       <form method="GET">
         <div class="form-group row" id="search_div">
           
@@ -46,18 +44,26 @@
 
       {% if not search_query %}
         <h3></h3>
+      {% elif not result %}
+          <h4>Unfortunately, there are no results for "{{ search_query }}"</h4>
       {% else %}
-        <h4>Unfortunately, there are no results for "{{ search_query }}"</h4>
+        <p>Messenger have got {{result|length}} posts for "{{ search_query }}" search query:</p>
+        {% for (post, username, time) in result %}
+          <div>
+            <p id="post">
+              '{{ post }}' by {{username}} at {{time}}
+            </p>
+          </div>
+        {% endfor %}
       {% endif %}
       <div>
         <p><a id="anc" href="/posts">Add Post</a></p>  
-        <p><a href="/login">Login</a>
-        <a href="/signup">Signup</a>
       </p>
       <p>
         {% if current_user.is_authenticated %}
-        <a href="/logout">Logout</a>
-        <a href="/profile">Profile</a>
+        <a href="/logout">Logout</a> | <a href="/profile">Profile</a>
+        {% else %}
+        <p><a href="/login">Login</a> | <a href="/signup">Signup</a>
       {% endif %}
       </p>
       </div> 

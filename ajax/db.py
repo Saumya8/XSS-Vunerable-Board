@@ -5,7 +5,7 @@ import sqlite3
 def connect_db():
     db = sqlite3.connect('database.db')
     db.cursor().execute('CREATE TABLE IF NOT EXISTS posts '
-                        '(id INTEGER PRIMARY KEY, post TEXT)')
+                        '(id INTEGER PRIMARY KEY, post TEXT, username Text, time TEXT)')
     db.cursor().execute('CREATE TABLE IF NOT EXISTS users '
                         '(user_id INTEGER PRIMARY KEY AUTOINCREMENT,email TEXT not null, password TEXT not null)')
     print("Opened database successfully")
@@ -15,18 +15,18 @@ def connect_db():
     return db
 
 
-def add_post(post):
+def add_post(post, username, time):
     db = connect_db()
-    db.cursor().execute('INSERT INTO posts (post) VALUES (?)', (post,))
+    db.cursor().execute('INSERT INTO posts (post, username, time) VALUES (?, ?, ?)', (post,username, time))
     db.commit()
 
 
 def get_posts():
     db = connect_db()
     results = []
-    get_all_query = 'SELECT post FROM posts'
-    for (post,) in db.cursor().execute(get_all_query).fetchall():
-            results.append(post)
+    get_all_query = 'SELECT post, username, time FROM posts'
+    for (post,username, time) in db.cursor().execute(get_all_query).fetchall():
+            results.append([post, username, time])
     return results
 
 #DB function already added in 

@@ -19,6 +19,18 @@
     
 }
 
+#post {
+    border: 1px solid rgba(16, 46, 46, 1);
+    background-color: rgba(187, 138, 138, 0.973);
+    border-radius: 5px;
+    padding-left: 40px;
+    padding-right: 30px;
+    padding-top: 10px;
+    margin: auto;
+    margin-bottom: 20px;
+    width: 80%;
+}
+
  
 #anc{
     text-decoration: none;
