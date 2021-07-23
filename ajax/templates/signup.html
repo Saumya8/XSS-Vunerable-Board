@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+{% autoescape false %}
+<html>
+  <head lang="en">
+  <meta charset="UTF-8">
+  <title>Oh no!</title>
+  
+
+    <link rel="stylesheet" href="/static/css/styles_sign.css">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  </head>
+<body>
+    <div id="root">
+        <div id="login" class="card">
+            <h5 class="card-header">Register</h5>
+            <div class="card-body">
+                <div>
+                    {% if current_user.is_authenticated %}
+                        <h8>Hi {{ current_user.email }}! You are already logged in</h8>
+                        <p><a id="anc" href="/logout">Logout</a> or check your <a id="anc" href="/profile">Profile</a></p>
+                    {% endif %}
+                </div>
+                <form method="POST" action="/signup" class="">
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                <h9>{{ message }}</h9>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <div class="form-group">
+                        <label class="form-label">Username:</label>
+                        <input name="username" placeholder="Username" type="text" class="form-control" value="">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password:</label>
+                        <input name="password" placeholder="Password" type="password" class="form-control" value="">
+                    </div>
+                    <button id="btn" type="submit" class="btn btn-primary">Sign Up</button>
+                    <p>Already have an account?  <a id="anc" href="/login">Login</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+   
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+{% endautoescape %}
+</html>
+<!--<!DOCTYPE html>
+{% autoescape false %}
+<html>
+  <head lang="en">
+  <meta charset="UTF-8">
+  <title>Oh no!</title>
+  
+
+    <link rel="stylesheet" href="/static/css/styles_sign.css">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  </head>
+<body>
+    <div id="root">
+        <div id="signup" class="card">
+            <h5 class="card-header">Sign Up</h5>
+            <div class="card-body">
+                <form method="POST" action="/" class="">
+                    <div class="form-group">
+                        <label class="form-label">Email:</label>
+                        <input name="username" placeholder="Username" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password:</label>
+                        <input name="password" placeholder="Password" type="password" class="form-control">
+                    </div>
+                    <button id="btn" type="submit" class="btn btn-primary">Sign Up</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+   
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+{% endautoescape %}
+</html>-->

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Logged In</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+    <div id="root">
+        <div id = "header">
+             <h1 id => Profile</h1></div>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+ 
+    
+    <div>
+        <h2>User Authenticated. Hi {{ current_user.email }}!</h2>
+        <p><a id="anc" href="/">Go back to Search</a></p>
+        <p><a id="anc" href="/posts">How about adding a Post?</a></p> 
+        <p><a id="anc" href="/logout">Do you wish to Logout?</a></p>
+    </div>
+</div>
+</body>
+</html>
