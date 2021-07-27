@@ -1,10 +1,16 @@
 #root {
     text-align: center;
   }
-
+#b{
+    background-color: #F7F7F7;
+}
 
 #header{
-    margin:200px auto 50px;
+    margin:150px auto 30px;
+}
+
+#msg{
+    margin-bottom: 30px;
 }
 
 #search_div{
@@ -19,22 +25,26 @@
     
 }
 
-#post {
-    border: 1px solid rgba(16, 46, 46, 1);
-    background-color: rgba(187, 138, 138, 0.973);
-    border-radius: 5px;
-    padding-left: 40px;
-    padding-right: 30px;
-    padding-top: 10px;
-    margin: auto;
-    margin-bottom: 20px;
-    width: 80%;
-}
-
  
 #anc{
     text-decoration: none;
 }
 #anc:hover{
     text-decoration: underline;
+}
+
+#po {
+    color: whitesmoke;
+}
+
+#pr {
+    color: whitesmoke;
+}
+
+#lo {
+    color: whitesmoke;
+}
+
+#se {
+    color: whitesmoke;
 }

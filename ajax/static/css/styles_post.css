@@ -1,41 +1,94 @@
-
+#b{
+    background-color: #F7F7F7;
+}
+#rowd{
+    width: 98.4448%;
+    
+}
 
 #posts{
     margin-top: 80px;
+    padding-left: 0%;
+    padding-right: 0%;
+
     
 }
 
 #write{
     margin-top: 80px;
+    padding-left: 0%;
+    padding-right: 0%;
 }
 
 #ta{
     width: 70%;
     margin: auto 0;
+    margin-left: 120px;
 }
 
 #l{
     margin-bottom: 15px;
+    margin-left: 120px;
 }
 
 #btn{
     margin-bottom: 15px;
     margin-top: 15px;
+    margin-left: 120px;
 }
 
 #post {
-    border: 1px solid rgba(16, 46, 46, 1);
-    background-color: rgba(187, 138, 138, 0.973);
-    border-radius: 5px;
-    padding-left: 40px;
-    padding-right: 30px;
-    padding-top: 10px;
-    margin: auto;
-    margin-bottom: 20px;
-    width: 80%;
+
+    width: 70%;
 }
 
 #la{
     margin-bottom: 15px;
-    margin-left: 25px;
+    margin-left: 110px;
+}
+
+#logout{
+    color: whitesmoke;
+}
+
+#content-section {
+    background: #ffffff;
+    padding: 10px 20px;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    margin-left: 110px;
+
+    width: 80%;
+  }
+  
+  #title {
+    color: #444444;
+  }
+  
+
+
+
+  #metadata {
+    padding-bottom: 1px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #e3e3e3
+  }
+  
+
+  
+#po {
+    color: whitesmoke;
+}
+
+#pr {
+    color: whitesmoke;
+}
+
+#lo {
+    color: whitesmoke;
+}
+
+#se {
+    color: whitesmoke;
 }
