@@ -5,7 +5,7 @@ import sqlite3
 import re
 from flask_login import login_user, current_user, logout_user, login_required, LoginManager, UserMixin
 from flask import flash
-
+from xml.sax.saxutils import escape, unescape
 
 app=Flask(__name__)
 
@@ -26,9 +26,6 @@ def connect_db():
     return db
 
 def search_posts(input_query):
-    print(input_query)
-    print("I got called yesss")
-    print(type(input_query))
     posts = db.get_posts()
     result = []
     for (post, user) in posts:
@@ -38,6 +35,8 @@ def search_posts(input_query):
 
 def text_str(input):
     return str(input).lower()
+
+
 
 
 class User(UserMixin):
@@ -147,10 +146,12 @@ def search():
     input_query=request.args.get('input')
     unfiltered_posts = db.get_posts()
     print(unfiltered_posts)
-    posts=search_posts(input_query)
-    print(posts)
-
-    return render_template('search.html', search_query=input_query,posts=posts)
+    if input_query:
+        posts=search_posts(escape(input_query))
+        print("escaped data")
+        print(escape(input_query))
+        return render_template('search.html', search_query=escape(input_query),posts=posts)
+    return render_template('search.html', search_query=input_query)
 
 
 
@@ -158,10 +159,11 @@ def search():
 @login_required
 def c():
     if request.method == 'POST':
-        db.add_post(request.form['post'],current_user.email.split('@')[0])
+        post=escape(request.form['post'])
+        print("escaped post:")
+        print(post)
+        db.add_post(post,current_user.email.split('@')[0])
     posts = db.get_posts()
-    # user_email=db.get_user()
-    # user=str(user_email).split('@')[0]
     # print(request.remote_addr)
     print(posts)
     print(type(posts))
