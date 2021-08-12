@@ -1,68 +1,44 @@
-#from db import add_user
-from flask import Flask, render_template, request, url_for,redirect, flash, Response 
+from flask import Flask, render_template, request, redirect, url_for,flash
+from flask_wtf import form
 import db
-import re
 import sqlite3
-import datetime
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
-#from forms import LoginForm
-#from forms import LoginForm
+import re
+from flask_login import login_user, current_user, logout_user, login_required, LoginManager, UserMixin
+from flask import flash
+
 
 app=Flask(__name__)
-import os
-SECRET_KEY = os.urandom(32)
-app.config['SECRET_KEY'] = SECRET_KEY
 
+app.config['SECRET_KEY']='c3294467824c35a6751cde802b37198a'
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
 
+
+def connect_db():
+    db = sqlite3.connect('database.db')
+    db.cursor().execute('CREATE TABLE IF NOT EXISTS posts '
+                        '(id INTEGER PRIMARY KEY, '
+                        'user TEXT, post TEXT)')
+    db.cursor().execute('CREATE TABLE IF NOT EXISTS users '
+                        '(id INTEGER PRIMARY KEY, '
+                        'email TEXT, password TEXT)')
+    db.commit()
+    return db
+
 def search_posts(input_query):
-    posts = db.get_posts();
+    print(input_query)
+    print("I got called yesss")
+    print(type(input_query))
+    posts = db.get_posts()
     result = []
-    for (post, username, time) in posts:
-        if re.search(text_str(input_query), text_str(post)) or re.search(text_str(input_query),text_str(username)):
-            result.append([post, username, time])
+    for (post, user) in posts:
+        if re.search(text_str(input_query), text_str(post)) or re.search(text_str(input_query),text_str(user)):
+            result.append([ post,user])
     return result
 
 def text_str(input):
     return str(input).lower()
 
-@app.route("/")
-def search():
-    input_query=request.args.get('input')
-    result = search_posts(input_query)
-    if result == []:
-        return render_template('search.html', search_query=input_query, result =None)
-
-    print("got some matches")
-    return render_template('search.html', search_query=input_query, result=result)
-        #redirect(url_for())
-
-#@app.route("/results")
-
-
-@app.route("/posts", methods=['GET', 'POST'])
-def c():
-    if request.method == 'POST' and request.form['post'] is not None:
-        if current_user.is_authenticated:
-            username = current_user.email
-        else:
-            username = "Anonymus"
-        now = datetime.datetime.now()
-        time = now.strftime('%H:%M:%S on %A: %B the %dth, %Y')
-        db.add_post(request.form['post'], username, time)
-    posts = db.get_posts()
-    return render_template('posts.html',posts=posts)
-
-@app.route("/profile")
-def success():
-    if current_user.is_authenticated:
-        print("logged into Profile")
-        return render_template('profile.html')
-    else:
-        flash("First login")
-        return render_template('login.html')
 
 class User(UserMixin):
     #def __init__(self, email, password):
@@ -99,106 +75,113 @@ class User(UserMixin):
         self.authenticated = True
 
 @login_manager.user_loader
-def load_user(user_id):
-   conn = sqlite3.connect('database.db')
-   curs = conn.cursor()
-   curs.execute("SELECT * from users where user_id = (?)",[user_id])
-   lu = curs.fetchone()
+def load_user(id):
+   db = connect_db()
+   lu = db.cursor().execute("SELECT * from users where id = (?)",(id,)).fetchone()
    if lu is None:
       return None
    else:
         u = User(int(lu[0]), lu[1], lu[2])
-        #u.authenticate()
-        return u 
+        return u
 
-@app.route('/logout')
+
+
+
+@app.route("/", methods=['GET', 'POST'])
+def login():
+    # print(request.environ['REMOTE_ADDR'])
+    # print(request.remote_addr)
+    if current_user.is_authenticated:
+        flash("Oops. Already Logged in. Logout First")
+        return redirect(url_for('search'))
+
+    if request.method=='POST':
+        db = connect_db()
+        currEmail=db.cursor().execute('SELECT * FROM users where email=(?)',(request.form['email'],)).fetchone()
+        if currEmail is None:
+            flash("Email entered isn't registered yet. Click on register")
+            print("Unregistered Email")
+            
+        else:
+            user = list(currEmail)
+            Us = load_user(user[0])
+            if(request.form['email'] == Us.email) and request.form['password'] == Us.password:
+                login_user(Us)
+                print("login Successfull")
+                return redirect(url_for('search'))
+            else:
+                print("login unsuccessful")
+                flash('Unsuccessful Login. Wrong password')
+    return render_template('login.html')
+    
+
+
+@app.route("/signup", methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        db = connect_db()
+        if db.cursor().execute('SELECT email FROM users where email=(?)',(request.form['email'],)).fetchone() is None:
+            db.cursor().execute('INSERT INTO users (email, password) '
+                                'VALUES (?, ?)', (request.form['email'],request.form['password'],))
+            db.commit()
+            print("User added successfully")
+            return redirect(url_for('login'))
+        else:
+            print("user exists already")
+    return render_template('signup.html')
+
+@app.route("/profile")
+@login_required
+def success():
+    if current_user.is_authenticated:
+        print("logged into Profile")
+        return render_template('profile.html')
+    else:
+        return render_template('login.html')
+
+
+
+@app.route("/search")
+@login_required
+def search():
+    input_query=request.args.get('input')
+    unfiltered_posts = db.get_posts()
+    print(unfiltered_posts)
+    posts=search_posts(input_query)
+    print(posts)
+    
+
+    return render_template('search.html', search_query=input_query,posts=posts)
+
+
+
+@app.route("/posts", methods=['GET', 'POST'])
+@login_required
+def c():
+    if request.method == 'POST':
+        db.add_post(request.form['post'],current_user.email.split('@')[0])
+    posts = db.get_posts()
+    # user_email=db.get_user()
+    # user=str(user_email).split('@')[0]
+    # print(request.remote_addr)
+    print(posts)
+    print(type(posts))
+    return render_template('posts.html',posts=posts)
+
+@app.route("/logout")
 @login_required
 def logout():
     print("on logout page")
     if(current_user.is_authenticated):
         logout_user()
-        print("loggout")
-        flash("Logout successful. Login again")
-    else:
-        print("not logged in")
-        flash("You need to login first.")
+        print("user logged out")
+        
+   
     return redirect(url_for('login'))
 
-@app.route("/signup", methods=['GET','POST'])
-def signup():
-    print("start signup")
-    if request.method == 'POST':
-        #creating a default email for non-null
-        email = "S"; password ="S"; print("input start")
-        email = request.form['username']
-        password = request.form['password'];    print("got input")
-        conn = sqlite3.connect('database.db');  print("db successfully loaded!")
-        curs = conn.cursor()
-        curs.execute("SELECT email FROM users where email = (?)",[email])
-        valemail = curs.fetchone();             print("fetched user")
-        if valemail is not None:
-            print("user already exists")
-            flash('This Email ID is already registered. Please use login')
-        elif email != "S" and password != "S":
-            #db.add_user(email, password)
-            #new_user = User(email=email, password=password)#password=generate_password_hash(password, method='sha256'))
-            conn.execute('INSERT OR IGNORE INTO users (email, password) VALUES(?,?)', (email,password)); conn.commit()
-            print("user added"); flash('Signup successfully '+ str(email) + '. Now Login')
-            return redirect(url_for('login'))
-        else:
-            flash('Signup unsuccessfully, email or password is blank'); print("signup failed")
-        #new_user = User(email='xyz@gmail.com', password='xyz123')#password=generate_password_hash('password', method='sha256'))
-        #db.session.add(new_user); db.session.commit()
-    else:
-        print("not post?")
-        #return render_template('signup.html')
-    return render_template('signup.html')
 
-@app.route("/login", methods=['GET','POST'])
-def login():
-    
-    #db.add_user('xyz@gmail.com', 'xyz123')
-    if current_user.is_authenticated:
-        flash("Oops. Already Logged in. Logout First")
-        return redirect(url_for('search'))
-
-    if request.method == 'POST':
-        print("take input")
-        email = request.form['username']
-        password = request.form['password']
-        #print(request.form.get('remember'))
-        rem = request.form.get('remember')
-        if rem is not None:
-            remember = True
-        else:
-            remember = False
-        #print(remember)
-        print("got input")
-
-        conn = sqlite3.connect('database.db');          print("db loaded")
-        curs = conn.cursor()
-        curs.execute("SELECT * FROM users where email = (?)",[email])
-        valemail = curs.fetchone()
-        if valemail is None:
-            flash("Email entered isn't registered yet. Click on register")
-            print("Unregistered Email")
-            #raise ValidationError('This Email ID is not registered. Please register before login')
-        else:
-            user = list(valemail)
-            Us = load_user(user[0])
-            #check_password_hash(user.password, password) #for hashing
-            if(email == Us.email) and password == Us.password:
-                login_user(Us, remember=remember)
-                print("login Successfull")
-                Umail = list({email})[0].split('@')[0]
-                flash('Logged in successfully '+ Umail)
-                return redirect(url_for('success'))
-            else:
-                print("login unsuccessfull")
-                flash('Login Unsuccessfull. Wrong password')
-    return render_template('login.html',title='Login')
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
         

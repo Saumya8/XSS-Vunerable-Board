@@ -4,30 +4,144 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Logged In</title>
+    <title>Oh no!</title>
     <link rel="stylesheet" href="/static/css/styles.css">
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-</head>
-<body>
-    <div id="root">
-        <div id = "header">
-             <h1 id => Profile</h1></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript">
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                {{ message }}
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
- 
+    /*function changeFunc()
+    {
+         var selectBox = document.getElementById("selectBox");
+         var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+        //  $("#selectBox").val(selectedValue)
+         
+         if(selectedValue==="Español")
+        {
+
+            $.ajax('/profile',   // request url
+            {
+                success: function (data, status, xhr) {// success callback function
+                $('#header').text("Perfil");
+                $('#p1').text("Hola");
+                $('#s').text("¿Qué quieres hacer hoy?");
+                $('#p2').text("¡Escribe publicaciones o explora nuevas publicaciones a través de la búsqueda!");
+                $('#p3').text("cambiar idioma");
+                }
+            });
+        }
+         else
+         {
+           
+            $.ajax('/profile',   // request url
+            {
+                success: function (data, status, xhr) {// success callback function
+                $('#header').text("Profile");
+                $('#p1').text("Hello");
+                $('#s').text("What do you want to do today?");
+                $('#p2').text("Write Posts or explore new posts through search!");
+                $('#p3').text("Change language");
+            }
+
+         });
+        }
+        
+    }*/
+
+        
+      
+    // function showfunc(){
+    //     $(document).ready(function(){
+    //     $("#btn").click(function(){  
+    //         console.log("got clicked")
+    //         var name=$("#username").val()
+    //         var new_text="Sorry, username '"+name+"' is taken already. Try another one. "
+    //         // $('#name').html(new_text);
+    //         document.getElementById('name').innerHTML = new_text;
+    //     });
+    // });
+        
+    // }
+
+    // $(document).ready(function(){
+    //     $("#btn").click(function(){  
+    //         console.log("got clicked")
+    //         var name=$("#username").val()
+    //         var new_text="Sorry, username '"+name+"' is taken already. Try another one. "
+    //         // $('#name').html(new_text);
+    //         document.getElementById('name').innerHTML = new_text;
+    //     });
+    // });
+    // jQuery($ => {
+    //     $("#form").on('submit', e => {
+    //         e.preventDefault();
+    //         //var new_text = "Sorry, username '" + $("#username").val() + "' is taken already. Try another one. ";
+    //         //$('#name').text(new_text);
+    //         document.getElementById('name').innerHTML = document.getElementById("username").value
+    //     });
+    // });
     
-    <div>
-        <p>Hi {{ current_user.email }}! What do you want to do today?</p>
-        <p><a id="anc" href="/">Go back to Search</a></p>
-        <p><a id="anc" href="/posts">How about adding a Post?</a></p> 
-        <p><a id="anc" href="/logout">Do you wish to Logout?</a></p>
+        function showInput(){
+            document.getElementById('name').innerHTML = 
+                    "Unfortunately, no results were found for "+ document.getElementById("username").value+ ".";
+        }
+     
+    </script>
+     
+    
+</head>
+<body id="b">
+    <div id="root">
+
+        
+
+        <nav id="nav" class="navbar navbar-dark bg-dark">
+            <!-- Navbar content -->
+            <a class="navbar-brand" href="#">Messenger</a>
+            <a class="nav-item nav-link" id="pr" href="/profile">Profile</a>
+            <a class="nav-item nav-link" id="po" href="/posts">Posts</a>
+            <a class="nav-item nav-link" id="se" href="/search">Search</a>
+            <a class="nav-item nav-link" id="lo" href="/logout">Log out</a>
+        </nav>
+
+        <div>
+            <h1 id = "header">Profile</h1>
+        <div>
+          
+        <span id="p1">Hello </span> <span >{{ current_user.email.split('@')[0] }}!</span> <span id="s">What do you want to do today?</span> 
+        <p id="p2">Write Posts or explore new posts through search!</p>
+
+        <div>
+            <!-- <span id="p3">Change language</span>
+            <span>
+                <form method="GET" onsubmit="changeFunc(); return false">
+                    <select id="selectBox" class="btn dropdown-toggle btn-primary" data-toggle="dropdown"  name="default" selected value="">
+                        <option> English</option>
+                        <option> Español</option>
+                        <option> French</option>
+                    </select>
+                    <input type="submit" class="btn btn-primary" value="select">
+                 </form>
+            </span> -->
+            <p>Change username</p>
+            <!-- <form id="#form" onsubmit="showfunc(); return false"> -->
+                <form id="form">
+                    <input id="username" name="username" type="text">
+                    <input class="btn btn-primary" value="submit" type="submit" id="btn" onclick="showInput(); return false;">
+                </form>
+            
+            <span id="name"></span>
+        </div>
+       
+        <!-- <script>
+            var r=location.href.substring(document.location.href.indexOf("default=")+8)
+            var p=decodeURIComponent(r)
+            document.write(p);
+            
+            //eval(r)
+        </script> -->
+        
     </div>
 </div>
 </body>
