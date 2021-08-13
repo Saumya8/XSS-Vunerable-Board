@@ -15,7 +15,7 @@
         <div id="login" class="card">
             <h5 id="h" class="card-header">Login</h5>
             <div class="card-body">
-                <form method="POST" action="/" class="">
+                <form action="/" class="">
                     {% if get_flashed_messages() %}
                         {% for message in get_flashed_messages() %}
                             <h9>{{ message }}</h9>
@@ -23,11 +23,11 @@
                     {% endif %}
                     <div class="form-group">
                         <label class="form-label">Email:</label>
-                        <input name="email" placeholder="Email" type="text" class="form-control" value="">
+                        <input id="e" name="email" placeholder="Email" type="text" class="form-control" value="">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Password:</label>
-                        <input name="password" placeholder="Password" type="password" class="form-control" value="">
+                        <input id="p" name="password" placeholder="Password" type="password" class="form-control" value="">
                     </div>
                     <button id="btn" type="submit" class="btn btn-primary">Submit</button>
                     <p>Don't have an account?  <a id="anc" href="/signup">Register</a></p>
