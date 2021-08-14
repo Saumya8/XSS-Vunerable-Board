@@ -25,7 +25,13 @@ def add_user(email, password):
 
     db.commit()
 
-
+def get_users():
+    db = connect_db()
+    results = []
+    get_all_query = 'SELECT * FROM users'
+    for (id,email,password,) in db.cursor().execute(get_all_query).fetchall():
+            results.append((email,password))
+    return results
    
 
 
