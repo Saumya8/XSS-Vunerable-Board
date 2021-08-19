@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title>Attack!</title>
+  
+
+        <link rel="stylesheet" href="/static/css/styles_post.css">
+    
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    </head>
+    <body id="b">
+        <div id="root">
+        <p>Do you want to <a id="anc" href="/logout">Logout</a>?</p>
+        <p> Showing {{users|length}} results</p>
+        {% for user in users %}
+        <div id="content-section">
+            <div id="metadata">
+                <h12>email: {{ user[0] }}</h12>
+            </div>
+            <p id="post">password: {{ user[1]}}</p>
+      </div>
+      {% endfor %}
+        </div>
+        
+    
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    </body>
+
+</html>
+
+
