@@ -44,21 +44,19 @@
 
       <div id="posts">
         {% if not search_query %}
-          <h3></h3>
+          <h3>Showing {{posts|length}} posts.</h3>
+        {% elif not posts %}
+          <h3>Unfortunately, there are no posts containing "{{ search_query }}"</h3>  
         {% else %}
-          {% if posts %}
-            <h3>Showing posts containing "{{ search_query }}":</h3>
-          {% else %}
-            <h3>Unfortunately, there are no posts containing "{{ search_query }}"</h3>
-          {% endif %}
+        <h3>Showing {{posts|length}} posts containing "{{ search_query }}":</h3>
         {% endif %}
-
+   
         {% for post in posts %}
           <div id="content-section">
             <div id="metadata">
               <h9>By {{ post[1] }}</h9>
             </div>
-          <p id="post">{{ post[0]}}</p>
+          <p id="post">"{{ post[0]}}"</p>
           </div>
         {% endfor %}
       </div>

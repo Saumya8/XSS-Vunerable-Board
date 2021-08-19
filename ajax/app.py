@@ -13,17 +13,17 @@ app.config['SECRET_KEY']='c3294467824c35a6751cde802b37198a'
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
 
-
+"""
 def connect_db():
     db = sqlite3.connect('database.db')
     db.cursor().execute('CREATE TABLE IF NOT EXISTS posts '
                         '(id INTEGER PRIMARY KEY, '
                         'user TEXT, post TEXT)')
     db.cursor().execute('CREATE TABLE IF NOT EXISTS users '
-                        '(id INTEGER PRIMARY KEY, '
+                        '(id INTEGER PRIMARY KEY AUTOINCREMENT, '
                         'email TEXT, password TEXT)')
     db.commit()
-    return db
+    return db"""
 
 def search_posts(input_query):
     print(input_query)
@@ -76,8 +76,8 @@ class User(UserMixin):
 
 @login_manager.user_loader
 def load_user(id):
-   db = connect_db()
-   lu = db.cursor().execute("SELECT * from users where id = (?)",(id,)).fetchone()
+   dby = db.connect_db()
+   lu = dby.cursor().execute("SELECT * from users where id = (?)",(id,)).fetchone()
    if lu is None:
       return None
    else:
@@ -96,8 +96,8 @@ def login():
         return redirect(url_for('search'))
 
     if request.method=='POST':
-        db = connect_db()
-        currEmail=db.cursor().execute('SELECT * FROM users where email=(?)',(request.form['email'],)).fetchone()
+        dby = db.connect_db()
+        currEmail = dby.cursor().execute('SELECT * FROM users where email=(?)',(request.form['email'],)).fetchone()
         if currEmail is None:
             flash("Email entered isn't registered yet. Click on register")
             print("Unregistered Email")
@@ -119,15 +119,25 @@ def login():
 @app.route("/signup", methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        db = connect_db()
-        if db.cursor().execute('SELECT email FROM users where email=(?)',(request.form['email'],)).fetchone() is None:
-            db.cursor().execute('INSERT INTO users (email, password) '
-                                'VALUES (?, ?)', (request.form['email'],request.form['password'],))
-            db.commit()
-            print("User added successfully")
-            return redirect(url_for('login'))
+        email = request.form['email']
+        password = request.form['password']
+        if email is None:
+            flash("Enter Email field")
+            print("input error")
+        elif password is None:
+            flash("Enter Password field")
+            print("input error")
         else:
-            print("user exists already")
+            dby = db.connect_db()
+            if dby.cursor().execute('SELECT email FROM users where email=(?)',(email,)).fetchone() is None:
+                dby.cursor().execute('INSERT INTO users (email, password) VALUES (?, ?)', (email,password,))
+                dby.commit()
+                flash("Signup successful. Now Login!")
+                print("User added successfully")
+                return redirect(url_for('login'))
+            else:
+                flash("User exists already with this credentials. Please use login")
+                print("user exists already with this.")
     return render_template('signup.html')
 
 @app.route("/profile")
