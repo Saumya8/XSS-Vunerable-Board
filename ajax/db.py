@@ -5,7 +5,7 @@ from flask import flash
 def connect_db():
     db = sqlite3.connect('database.db')
     db.cursor().execute('CREATE TABLE IF NOT EXISTS posts '
-                        '(id INTEGER PRIMARY KEY, post TEXT)')
+                        '(id INTEGER PRIMARY KEY AUTOINCREMENT, user TEXT, post TEXT)')
     db.cursor().execute('CREATE TABLE IF NOT EXISTS users '
                         '(id INTEGER PRIMARY KEY AUTOINCREMENT, '
                         'email TEXT, password TEXT)')

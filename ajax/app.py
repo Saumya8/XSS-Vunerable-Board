@@ -1,15 +1,17 @@
 from flask import Flask, render_template, request, redirect, url_for,flash
 from flask_wtf import form
 import db
-import sqlite3
+#import sqlite3
 import re
 from flask_login import login_user, current_user, logout_user, login_required, LoginManager, UserMixin
-from flask import flash
+#from flask import flash
 
 
 app=Flask(__name__)
-
-app.config['SECRET_KEY']='c3294467824c35a6751cde802b37198a'
+import os
+SECRET_KEY = os.urandom(32)
+app.config['SECRET_KEY'] = SECRET_KEY
+#app.config['SECRET_KEY']='c3294467824c35a6751cde802b37198a'
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
 
