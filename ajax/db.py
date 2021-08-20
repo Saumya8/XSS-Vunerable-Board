@@ -5,10 +5,9 @@ from flask import flash
 def connect_db():
     db = sqlite3.connect('database.db')
     db.cursor().execute('CREATE TABLE IF NOT EXISTS posts '
-                        '(id INTEGER PRIMARY KEY, '
-                        'post TEXT)')
+                        '(id INTEGER PRIMARY KEY AUTOINCREMENT, user TEXT, post TEXT)')
     db.cursor().execute('CREATE TABLE IF NOT EXISTS users '
-                        '(id INTEGER PRIMARY KEY, '
+                        '(id INTEGER PRIMARY KEY AUTOINCREMENT, '
                         'email TEXT, password TEXT)')
     db.commit()
     return db
@@ -25,16 +24,17 @@ def add_user(email, password):
 
     db.commit()
 
+"""
 def verify_user(email, password):
     db = connect_db()
     if db.cursor().execute('SELECT password FROM users where email=(?)',[email]).fetchone()[0]==password:
         print("User Exists")
         db.commit() 
         return 1
-        
     else:
         print("nah")
         return None
+"""
    
 def get_id(email):
     db = connect_db()

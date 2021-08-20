@@ -1,7 +1,9 @@
 #root {
     text-align: center;
   }
-
+#b{
+    background-color: #F7F7F7;
+}
 
 #header{
     margin:150px auto 30px;

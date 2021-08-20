@@ -4,17 +4,43 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Logged In</title>
+    <title>Oh no!</title>
     <link rel="stylesheet" href="/static/css/styles.css">
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script type="text/javascript">
+
+
+        function escapeXml(unsafe) {
+            return unsafe.replace(/[<>&'"]/g, function (c) {
+                switch (c) {
+                    case '<': return '&lt;';
+                    case '>': return '&gt;';
+                    case '&': return '&amp;';
+                    case '\'': return '&apos;';
+                    case '"': return '&quot;';
+                }
+            });
+        }
+    
+        function showInput(){
+            user= escapeXml(document.getElementById("username").value) 
+            document.getElementById('name').innerHTML = 
+                    "Unfortunately, username "+ user + " is taken already. Try another name.";
+        }
+     
+    </script>
+     
+    
 </head>
-<body>
+<body id="b">
     <div id="root">
 
-        
 
-        <nav class="navbar navbar-dark bg-dark">
+
+        <nav id="nav" class="navbar navbar-dark bg-dark">
             <!-- Navbar content -->
             <a class="navbar-brand" href="#">Messenger</a>
             <a class="nav-item nav-link" id="pr" href="/profile">Profile</a>
@@ -23,12 +49,43 @@
             <a class="nav-item nav-link" id="lo" href="/logout">Log out</a>
         </nav>
 
-        <div id = "header">
-            <h1 id => Profile</h1></div>
+        <div>
+            <h1 id = "header">Profile</h1>
         <div>
           
-        <p>Hi {{ current_user.email.split('@')[0] }}! What do you want to do today?</p>
+        <span id="p1">Hello </span> <span >{{ current_user.email.split('@')[0] }}!</span> <span id="s">What do you want to do today?</span> 
+        <p id="p2">Write Posts or explore new posts through search!</p>
 
+        <div>
+            <!-- <span id="p3">Change language</span>
+            <span>
+                <form method="GET" onsubmit="changeFunc(); return false">
+                    <select id="selectBox" class="btn dropdown-toggle btn-primary" data-toggle="dropdown"  name="default" selected value="">
+                        <option> English</option>
+                        <option> Español</option>
+                        <option> French</option>
+                    </select>
+                    <input type="submit" class="btn btn-primary" value="select">
+                 </form>
+            </span> -->
+            <p>Change username</p>
+            <!-- <form id="#form" onsubmit="showfunc(); return false"> -->
+                <form id="form">
+                    <input id="username" name="username" type="text">
+                    <input class="btn btn-primary" value="submit" type="submit" id="btn" onclick="showInput(); return false;">
+                </form>
+            
+            <span id="name"></span>
+        </div>
+       
+        <!-- <script>
+            var r=location.href.substring(document.location.href.indexOf("default=")+8)
+            var p=decodeURIComponent(r)
+            document.write(p);
+            
+            //eval(r)
+        </script> -->
+        
     </div>
 </div>
 </body>

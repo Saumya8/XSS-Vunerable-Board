@@ -1,31 +1,37 @@
 from flask import Flask, render_template, request, redirect, url_for,flash
 from flask_wtf import form
 import db
-import sqlite3
+#import sqlite3
 import re
 from flask_login import login_user, current_user, logout_user, login_required, LoginManager, UserMixin
-from flask import flash
 from xml.sax.saxutils import escape, unescape
 
-app=Flask(__name__)
+#from flask import flash
 
-app.config['SECRET_KEY']='c3294467824c35a6751cde802b37198a'
+
+app=Flask(__name__)
+import os
+SECRET_KEY = os.urandom(32)
+app.config['SECRET_KEY'] = SECRET_KEY
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
 
-
+"""
 def connect_db():
     db = sqlite3.connect('database.db')
     db.cursor().execute('CREATE TABLE IF NOT EXISTS posts '
                         '(id INTEGER PRIMARY KEY, '
                         'user TEXT, post TEXT)')
     db.cursor().execute('CREATE TABLE IF NOT EXISTS users '
-                        '(id INTEGER PRIMARY KEY, '
+                        '(id INTEGER PRIMARY KEY AUTOINCREMENT, '
                         'email TEXT, password TEXT)')
     db.commit()
-    return db
+    return db"""
 
 def search_posts(input_query):
+    print(input_query)
+    print("I got called yesss")
+    print(type(input_query))
     posts = db.get_posts()
     result = []
     for (post, user) in posts:
@@ -35,8 +41,6 @@ def search_posts(input_query):
 
 def text_str(input):
     return str(input).lower()
-
-
 
 
 class User(UserMixin):
@@ -75,8 +79,8 @@ class User(UserMixin):
 
 @login_manager.user_loader
 def load_user(id):
-   db = connect_db()
-   lu = db.cursor().execute("SELECT * from users where id = (?)",(id,)).fetchone()
+   dby = db.connect_db()
+   lu = dby.cursor().execute("SELECT * from users where id = (?)",(id,)).fetchone()
    if lu is None:
       return None
    else:
@@ -95,8 +99,8 @@ def login():
         return redirect(url_for('search'))
 
     if request.method=='POST':
-        db = connect_db()
-        currEmail=db.cursor().execute('SELECT * FROM users where email=(?)',(request.form['email'],)).fetchone()
+        dby = db.connect_db()
+        currEmail = dby.cursor().execute('SELECT * FROM users where email=(?)',(request.form['email'],)).fetchone()
         if currEmail is None:
             flash("Email entered isn't registered yet. Click on register")
             print("Unregistered Email")
@@ -107,7 +111,7 @@ def login():
             if(request.form['email'] == Us.email) and request.form['password'] == Us.password:
                 login_user(Us)
                 print("login Successfull")
-                redirect(url_for('search'))
+                return redirect(url_for('search'))
             else:
                 print("login unsuccessful")
                 flash('Unsuccessful Login. Wrong password')
@@ -118,15 +122,25 @@ def login():
 @app.route("/signup", methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        db = connect_db()
-        if db.cursor().execute('SELECT email FROM users where email=(?)',(request.form['email'],)).fetchone() is None:
-            db.cursor().execute('INSERT INTO users (email, password) '
-                                'VALUES (?, ?)', (request.form['email'],request.form['password'],))
-            db.commit()
-            print("User added successfully")
-            return redirect(url_for('login'))
+        email = request.form['email']
+        password = request.form['password']
+        if email is None:
+            flash("Enter Email field")
+            print("input error")
+        elif password is None:
+            flash("Enter Password field")
+            print("input error")
         else:
-            print("user exists already")
+            dby = db.connect_db()
+            if dby.cursor().execute('SELECT email FROM users where email=(?)',(email,)).fetchone() is None:
+                dby.cursor().execute('INSERT INTO users (email, password) VALUES (?, ?)', (email,password,))
+                dby.commit()
+                flash("Signup successful. Now Login!")
+                print("User added successfully")
+                return redirect(url_for('login'))
+            else:
+                flash("User exists already with this credentials. Please use login")
+                print("user exists already with this.")
     return render_template('signup.html')
 
 @app.route("/profile")
@@ -147,11 +161,12 @@ def search():
     unfiltered_posts = db.get_posts()
     print(unfiltered_posts)
     if input_query:
-        posts=search_posts(escape(input_query))
-        print("escaped data")
+        posts=search_posts(input_query)
         print(escape(input_query))
+        print(posts)
         return render_template('search.html', search_query=escape(input_query),posts=posts)
     return render_template('search.html', search_query=input_query)
+        
 
 
 
@@ -164,7 +179,6 @@ def c():
         print(post)
         db.add_post(post,current_user.email.split('@')[0])
     posts = db.get_posts()
-    # print(request.remote_addr)
     print(posts)
     print(type(posts))
     return render_template('posts.html',posts=posts)
@@ -184,5 +198,5 @@ def logout():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True, host='127.0.0.1', port=5001)
         
