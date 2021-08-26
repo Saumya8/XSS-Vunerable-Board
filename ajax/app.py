@@ -187,7 +187,7 @@ def logout():
     if(current_user.is_authenticated):
         logout_user()
         print("user logged out")
-        
+        flash("Successfully Logged out.")
    
     return redirect(url_for('login'))
 

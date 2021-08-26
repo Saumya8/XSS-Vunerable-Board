@@ -37,7 +37,7 @@
     
     <div class="col" id="write">
       <form method="POST">
-        <h5 id="l">Write a post:</h5>
+        <h5 id="l">Hi {{ current_user.email.split('@')[0] }}! Write a post:</h5>
         <textarea class="form-control ml-1 shadow-none textarea" id="ta" name="post"></textarea>
         <input type="submit" value="Submit Post" class="btn btn-primary" id="btn" />
       </form>

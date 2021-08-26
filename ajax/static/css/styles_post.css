@@ -38,8 +38,7 @@
 }
 
 #post {
-
-    width: 70%;
+    width: 100%;
 }
 
 #la{
@@ -58,7 +57,6 @@
     border-radius: 3px;
     margin-bottom: 20px;
     margin-left: 110px;
-
     width: 80%;
   }
   
